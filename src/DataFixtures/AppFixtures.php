@@ -18,6 +18,33 @@ class AppFixtures extends Fixture {
      */
     private $faker;
 
+    const USERS = [
+        [
+            'username' => 'admin',
+            'email' => 'admin@gmail.com',
+            'name' => 'Anton Pokhodun',
+            'password' => 'test123T',
+        ],
+        [
+            'username' => 'bobby',
+            'email' => 'bobby@gmail.com',
+            'name' => 'Bob Sinclar',
+            'password' => 'test123T',
+        ],
+        [
+            'username' => 'johny',
+            'email' => 'johny@gmail.com',
+            'name' => 'John Travolta',
+            'password' => 'test123T',
+        ],
+        [
+            'username' => 'bless',
+            'email' => 'bless_palcal@gmail.com',
+            'name' => 'Bless Pascal',
+            'password' => 'test123T',
+        ],
+    ];
+
     /**
      * AppFixtures constructor.
      * @param UserPasswordEncoderInterface $encoder
@@ -34,8 +61,6 @@ class AppFixtures extends Fixture {
     }
 
     public function loadComments(ObjectManager $manager) {
-        $user = $this->getReference('admin_user');
-
         for ($i = 0; $i < 100; $i++) {
             $rand = mt_rand(1, 99);
             $post = $this->getReference("blog_post_{$rand}");
@@ -43,18 +68,16 @@ class AppFixtures extends Fixture {
             $comment->setPublished($this->faker->dateTime);
             $comment->setContent($this->faker->realText());
             $comment->setBlogPost($post);
-            $comment->setAuthor($user);
+            $comment->setAuthor($this->getRandomAuthor());
             $manager->persist($comment);
         }
         $manager->flush();
     }
 
     public function loadPosts(ObjectManager $manager) {
-        $user = $this->getReference('admin_user');
-
         for ($i = 0; $i < 100; $i++) {
             $post = new BlogPost();
-            $post->setAuthor($user);
+            $post->setAuthor($this->getRandomAuthor());
             $post->setContent($this->faker->realText());
             $post->setPublished($this->faker->dateTime);
             $post->setSlug($this->faker->slug);
@@ -67,14 +90,24 @@ class AppFixtures extends Fixture {
         $manager->flush();
     }
 
-    public function loadUsers(ObjectManager $manager) {
-        $user = new User();
-        $user->setEmail('antony.hopkins008@gmail.com');
-        $user->setName('Anton Pokhodun');
-        $user->setPassword($this->encoder->encodePassword($user, 'test123T'));
-        $user->setUsername('admin');
-        $this->addReference('admin_user', $user);
-        $manager->persist($user);
+    public function loadUsers(ObjectManager $manager)
+    {
+        foreach (self::USERS as $userTemplate) {
+            $user = new User();
+            $user->setEmail($userTemplate['email']);
+            $user->setName($userTemplate['name']);
+            $user->setPassword($this->encoder->encodePassword($user, $userTemplate['password']));
+            $user->setUsername($userTemplate['username']);
+            $this->addReference('user_'. $userTemplate['username'], $user);
+            $manager->persist($user);
+        }
+
         $manager->flush();
+    }
+
+    private function getRandomAuthor()
+    {
+        $user = self::USERS[rand(0, 3)]['username'];
+        return $this->getReference('user_'.$user);
     }
 }
