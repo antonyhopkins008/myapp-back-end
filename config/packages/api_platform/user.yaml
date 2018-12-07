@@ -1,0 +1,23 @@
+App\Entity\User:
+  attributes:
+    normalization_context:
+      groups: ['get']
+  #Item
+  itemOperations:
+    get:
+      access_control: is_granted('IS_AUTHENTICATED_FULLY', object)
+      normalization_context:
+        groups: ['get']
+    put:
+      access_control: is_granted('IS_AUTHENTICATED_FULLY', object) and object === user
+      denormalization_context:
+        groups: ['put']
+
+  #Collection
+  collectionOperations:
+    post:
+      access_control: is_granted('IS_AUTHENTICATED_FULLY', object)
+      denormalization_context:
+        groups: ['post']
+      normalization_context:
+        groups: ['get']
