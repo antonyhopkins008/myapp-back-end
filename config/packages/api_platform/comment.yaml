@@ -1,7 +1,11 @@
 App\Entity\Comment:
   attributes:
+#    force_eager: false
     normalization_context:
       groups: ['get']
+
+    denormalization_context:
+      groups: ['post']
 
   itemOperations:
     get:
@@ -12,4 +16,7 @@ App\Entity\Comment:
     get:
     post:
       access_control: is_granted('IS_AUTHENTICATED_FULLY', object)
+    api_blog_posts_comments_get_subresource:
+      method: 'GET'
+      normalization_context: {groups: ['get-comment-with-author']}
 

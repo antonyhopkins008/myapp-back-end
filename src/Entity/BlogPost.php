@@ -19,6 +19,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"get-blog-post-with-author", "get"})
      */
     private $id;
 
@@ -26,13 +27,14 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min="5")
+     * @Groups({"post", "get-blog-post-with-author", "get"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank()
      * @Assert\DateTime()
+     * @Groups({"get-blog-post-with-author", "get"})
      */
     private $published;
 
@@ -40,25 +42,27 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      * @Assert\Length(min="20")
+     * @Groups({"post", "get-blog-post-with-author", "get"})
      */
     private $content;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="post")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get-blog-post-with-author"})
      */
     private $author;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="blogPost")
-     * @Groups({"get"})
+     * @Groups({"get-blog-post-with-author"})
      */
     private $comment;
-
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"post", "get-blog-post-with-author"})
      */
     private $slug;
 
