@@ -12,12 +12,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture {
 
-    private $encoder;
-    /**
-     * @var \Faker\Factory
-     */
-    private $faker;
-
     const USERS = [
         [
             'username' => 'admin',
@@ -44,37 +38,46 @@ class AppFixtures extends Fixture {
             'password' => 'test123T',
         ],
     ];
+    private $encoder;
+    /**
+     * @var \Faker\Factory
+     */
+    private $faker;
 
     /**
      * AppFixtures constructor.
      * @param UserPasswordEncoderInterface $encoder
      */
-    public function __construct(UserPasswordEncoderInterface $encoder) {
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
         $this->encoder = $encoder;
         $this->faker = Factory::create();
     }
 
-    public function load(ObjectManager $manager) {
+    public function load(ObjectManager $manager)
+    {
         $this->loadUsers($manager);
         $this->loadPosts($manager);
         $this->loadComments($manager);
     }
 
-    public function loadComments(ObjectManager $manager) {
-        for ($i = 0; $i < 100; $i++) {
-            $rand = mt_rand(1, 99);
-            $post = $this->getReference("blog_post_{$rand}");
-            $comment = new Comment();
-            $comment->setPublished($this->faker->dateTime);
-            $comment->setContent($this->faker->realText());
-            $comment->setBlogPost($post);
-            $comment->setAuthor($this->getRandomAuthor());
-            $manager->persist($comment);
+    public function loadUsers(ObjectManager $manager)
+    {
+        foreach (self::USERS as $userTemplate) {
+            $user = new User();
+            $user->setEmail($userTemplate['email']);
+            $user->setName($userTemplate['name']);
+            $user->setPassword($this->encoder->encodePassword($user, $userTemplate['password']));
+            $user->setUsername($userTemplate['username']);
+            $this->addReference('user_'.$userTemplate['username'], $user);
+            $manager->persist($user);
         }
+
         $manager->flush();
     }
 
-    public function loadPosts(ObjectManager $manager) {
+    public function loadPosts(ObjectManager $manager)
+    {
         for ($i = 0; $i < 100; $i++) {
             $post = new BlogPost();
             $post->setAuthor($this->getRandomAuthor());
@@ -90,24 +93,25 @@ class AppFixtures extends Fixture {
         $manager->flush();
     }
 
-    public function loadUsers(ObjectManager $manager)
-    {
-        foreach (self::USERS as $userTemplate) {
-            $user = new User();
-            $user->setEmail($userTemplate['email']);
-            $user->setName($userTemplate['name']);
-            $user->setPassword($this->encoder->encodePassword($user, $userTemplate['password']));
-            $user->setUsername($userTemplate['username']);
-            $this->addReference('user_'. $userTemplate['username'], $user);
-            $manager->persist($user);
-        }
-
-        $manager->flush();
-    }
-
     private function getRandomAuthor()
     {
         $user = self::USERS[rand(0, 3)]['username'];
+
         return $this->getReference('user_'.$user);
+    }
+
+    public function loadComments(ObjectManager $manager)
+    {
+        for ($i = 0; $i < 100; $i++) {
+            $rand = mt_rand(1, 99);
+            $post = $this->getReference("blog_post_{$rand}");
+            $comment = new Comment();
+            $comment->setPublished($this->faker->dateTime);
+            $comment->setContent($this->faker->realText());
+            $comment->setBlogPost($post);
+            $comment->setAuthor($this->getRandomAuthor());
+            $manager->persist($comment);
+        }
+        $manager->flush();
     }
 }

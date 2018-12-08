@@ -19,11 +19,13 @@ class PasswordEventSubscriber implements EventSubscriberInterface {
      * PasswordEventSubscriber constructor.
      * @param UserPasswordEncoderInterface $encoder
      */
-    public function __construct(UserPasswordEncoderInterface $encoder) {
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
         $this->encoder = $encoder;
     }
 
-    public static function getSubscribedEvents() {
+    public static function getSubscribedEvents()
+    {
         return [
             KernelEvents::VIEW => [
                 "hashPassword",
@@ -32,7 +34,8 @@ class PasswordEventSubscriber implements EventSubscriberInterface {
         ];
     }
 
-    public function hashPassword(GetResponseForControllerResultEvent $event) {
+    public function hashPassword(GetResponseForControllerResultEvent $event)
+    {
         $user = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 

@@ -84,50 +84,60 @@ class User implements UserInterface {
     /**
      * User constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->post = new ArrayCollection();
         $this->comment = new ArrayCollection();
     }
 
-    public function getId(): ?int {
+    public function getId(): ?int
+    {
         return $this->id;
     }
 
-    public function getUsername(): ?string {
+    public function getUsername(): ?string
+    {
         return $this->username;
     }
 
-    public function setUsername(string $username): self {
+    public function setUsername(string $username): self
+    {
         $this->username = $username;
 
         return $this;
     }
 
-    public function getPassword(): ?string {
+    public function getPassword(): ?string
+    {
         return $this->password;
     }
 
-    public function setPassword(string $password): self {
+    public function setPassword(string $password): self
+    {
         $this->password = $password;
 
         return $this;
     }
 
-    public function getName(): ?string {
+    public function getName(): ?string
+    {
         return $this->name;
     }
 
-    public function setName(string $name): self {
+    public function setName(string $name): self
+    {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getEmail(): ?string {
+    public function getEmail(): ?string
+    {
         return $this->email;
     }
 
-    public function setEmail(string $email): self {
+    public function setEmail(string $email): self
+    {
         $this->email = $email;
 
         return $this;
@@ -136,34 +146,41 @@ class User implements UserInterface {
     /**
      * @return Collection
      */
-    public function getPost() {
+    public function getPost()
+    {
         return $this->post;
     }
 
     /**
      * @return Collection
      */
-    public function getComment() {
+    public function getComment()
+    {
         return $this->comment;
     }
 
-    public function getRoles() {
+    public function getRoles()
+    {
         return array('ROLE_USER');
     }
 
-    public function getSalt() {
+    public function getSalt()
+    {
         return null;
     }
 
-    public function eraseCredentials() {
+    public function eraseCredentials()
+    {
         return null;
     }
 
-    public function getRetypedPassword() {
+    public function getRetypedPassword()
+    {
         return $this->retypedPassword;
     }
 
-    public function setRetypedPassword($retypedPassword): void {
+    public function setRetypedPassword($retypedPassword): void
+    {
         $this->retypedPassword = $retypedPassword;
     }
 }

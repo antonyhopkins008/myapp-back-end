@@ -23,7 +23,8 @@ class BlogController extends AbstractController {
      * @param Request $request
      * @return JsonResponse
      */
-    public function list($page, Request $request) {
+    public function list($page, Request $request)
+    {
         $limit = $request->get('limit', 100);
         $repository = $this->getDoctrine()->getRepository(BlogPost::class);
         $items = $repository->findAll();
@@ -42,7 +43,8 @@ class BlogController extends AbstractController {
      * @param BlogPost $post
      * @return JsonResponse
      */
-    public function post(BlogPost $post) {
+    public function post(BlogPost $post)
+    {
         //the same as find($id)
         return $this->json($post);
     }
@@ -52,7 +54,8 @@ class BlogController extends AbstractController {
      * @param BlogPost $post
      * @return JsonResponse
      */
-    public function postBySlug(BlogPost $post) {
+    public function postBySlug(BlogPost $post)
+    {
         return $this->json($post);
     }
 
@@ -61,7 +64,8 @@ class BlogController extends AbstractController {
      * @param Request $request
      * @return JsonResponse
      */
-    public function add(Request $request) {
+    public function add(Request $request)
+    {
         /** @var Serializer $serializer */
         $serializer = $this->get('serializer');
 
@@ -79,7 +83,8 @@ class BlogController extends AbstractController {
      * @param BlogPost $post
      * @return JsonResponse
      */
-    public function delete(BlogPost $post) {
+    public function delete(BlogPost $post)
+    {
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);
         $em->flush();

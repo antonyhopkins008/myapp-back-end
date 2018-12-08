@@ -12,8 +12,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method BlogPost[]    findAll()
  * @method BlogPost[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BlogPostRepository extends ServiceEntityRepository
-{
+class BlogPostRepository extends ServiceEntityRepository {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, BlogPost::class);

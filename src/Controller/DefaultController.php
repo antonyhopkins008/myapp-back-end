@@ -15,7 +15,8 @@ class DefaultController extends AbstractController {
     /**
      * @Route("/", name="default_controller")
      */
-    public function index() {
+    public function index()
+    {
         return new JsonResponse([
             'method' => 'index',
             'time' => time(),

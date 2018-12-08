@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
-class Comment {
+class Comment implements AuthoredEntityInterface, PublishedEntityInterface {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -37,33 +38,40 @@ class Comment {
      */
     private $blogPost;
 
-    public function getBlogPost(): BlogPost {
+    public function getBlogPost(): BlogPost
+    {
         return $this->blogPost;
     }
 
-    public function setBlogPost($blogPost): void {
+    public function setBlogPost($blogPost): void
+    {
         $this->blogPost = $blogPost;
     }
 
-    public function getId(): ?int {
+    public function getId(): ?int
+    {
         return $this->id;
     }
 
-    public function getContent(): ?string {
+    public function getContent(): ?string
+    {
         return $this->content;
     }
 
-    public function setContent(string $content): self {
+    public function setContent(string $content): self
+    {
         $this->content = $content;
 
         return $this;
     }
 
-    public function getPublished(): ?\DateTimeInterface {
+    public function getPublished(): ?\DateTimeInterface
+    {
         return $this->published;
     }
 
-    public function setPublished(\DateTimeInterface $published): self {
+    public function setPublished(\DateTimeInterface $published): PublishedEntityInterface
+    {
         $this->published = $published;
 
         return $this;
@@ -72,15 +80,13 @@ class Comment {
     /**
      * @return User
      */
-    public function getAuthor() {
+    public function getAuthor()
+    {
         return $this->author;
     }
 
-    /**
-     * @param User $author
-     * @return Comment
-     */
-    public function setAuthor(User $author): self {
+    public function setAuthor(UserInterface $author): AuthoredEntityInterface
+    {
         $this->author = $author;
 
         return $this;

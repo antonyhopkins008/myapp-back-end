@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,8 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\BlogPostRepository")
  * @UniqueEntity(fields={"title", "slug"})
  */
-class BlogPost
-{
+class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -65,69 +65,79 @@ class BlogPost
     /**
      * BlogPost constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->comment = new ArrayCollection();
     }
 
-    public function getComment(): Collection {
+    public function getComment(): Collection
+    {
         return $this->comment;
     }
 
-    public function setComment($comment): void {
+    public function setComment($comment): void
+    {
         $this->comment = $comment;
     }
 
-    public function getId(): ?int {
+    public function getId(): ?int
+    {
         return $this->id;
     }
 
-    public function getTitle(): ?string {
+    public function getTitle(): ?string
+    {
         return $this->title;
     }
 
-    public function setTitle(string $title): self {
+    public function setTitle(string $title): self
+    {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getPublished(): ?\DateTimeInterface {
+    public function getPublished(): ?\DateTimeInterface
+    {
         return $this->published;
     }
 
-    public function setPublished(\DateTimeInterface $published): self {
+    public function setPublished(\DateTimeInterface $published): PublishedEntityInterface
+    {
         $this->published = $published;
 
         return $this;
     }
 
-    public function getContent(): ?string {
+    public function getContent(): ?string
+    {
         return $this->content;
     }
 
-    public function setContent(string $content): self {
+    public function setContent(string $content): self
+    {
         $this->content = $content;
 
         return $this;
     }
 
-    public function getSlug() {
+    public function getSlug()
+    {
         return $this->slug;
     }
 
-    public function setSlug($slug): void {
+    public function setSlug($slug): void
+    {
         $this->slug = $slug;
     }
 
-    public function getAuthor() {
+    public function getAuthor()
+    {
         return $this->author;
     }
 
-    /**
-     * @param User $author
-     * @return BlogPost
-     */
-    public function setAuthor(User $author): self {
+    public function setAuthor(UserInterface $author): AuthoredEntityInterface
+    {
         $this->author = $author;
 
         return $this;
