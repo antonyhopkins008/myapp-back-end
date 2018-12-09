@@ -12,6 +12,13 @@ App\Entity\User:
       access_control: is_granted('IS_AUTHENTICATED_FULLY', object) and object === user
       denormalization_context:
         groups: ['put']
+    put-reset-password:
+      method: 'PUT'
+      path: 'users/{id}/reset-password'
+      controller: 'App\Controller\ResetPasswordAction'
+      access_control: is_granted('IS_AUTHENTICATED_FULLY', object) and object === user
+      denormalization_context:
+        groups: ['put-reset-password']
 
   #Collection
   collectionOperations:
