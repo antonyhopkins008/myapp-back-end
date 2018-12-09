@@ -15,6 +15,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields={"username", "email"})
  */
 class User implements UserInterface {
+    const ROLE_COMMENTATOR = 'ROLE_COMMENTATOR';
+    const ROLE_EDITOR = 'ROLE_EDITOR';
+    const ROLE_WRITER = 'ROLE_WRITER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_SUPERADMIN = 'ROLE_SUPERADMIN';
+    const DEFAULT_ROLES = 'ROLE_COMMENTATOR';
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -77,8 +83,15 @@ class User implements UserInterface {
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
+     * @Groups({"get"})
      */
     private $comment;
+
+    /**
+     * @ORM\Column(type="simple_array", length=200)
+     * @Groups({"get"})
+     */
+    private $roles;
 
     /**
      * User constructor.
@@ -87,6 +100,7 @@ class User implements UserInterface {
     {
         $this->post = new ArrayCollection();
         $this->comment = new ArrayCollection();
+        $this->roles = self::DEFAULT_ROLES;
     }
 
     public function getId(): ?int
@@ -158,9 +172,14 @@ class User implements UserInterface {
         return $this->comment;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
-        return array('ROLE_USER');
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
     }
 
     public function getSalt()
