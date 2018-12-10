@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 
 
 use ApiPlatform\Core\EventListener\EventPriorities;
+use App\Email\Mailer;
 use App\Entity\User;
 use App\Security\TokenGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,18 +20,25 @@ class UserRegisterSubscriber implements EventSubscriberInterface {
      * @var TokenGenerator
      */
     private $tokenGenerator;
+    /**
+     * @var \Swift_Mailer
+     */
+    private $mailer;
 
     /**
      * PasswordEventSubscriber constructor.
      * @param UserPasswordEncoderInterface $encoder
      * @param TokenGenerator $tokenGenerator
+     * @param Mailer $mailer
      */
     public function __construct(
         UserPasswordEncoderInterface $encoder,
-        TokenGenerator $tokenGenerator
+        TokenGenerator $tokenGenerator,
+        Mailer $mailer
     ) {
         $this->encoder = $encoder;
         $this->tokenGenerator = $tokenGenerator;
+        $this->mailer = $mailer;
     }
 
     public static function getSubscribedEvents()
@@ -55,5 +63,7 @@ class UserRegisterSubscriber implements EventSubscriberInterface {
         $user->setPassword($this->encoder->encodePassword($user, $user->getPassword()));
 
         $user->setConfirmationToken($this->tokenGenerator->getRandomToken());
+
+        $this->mailer->sendConfirmation($user);
     }
 }

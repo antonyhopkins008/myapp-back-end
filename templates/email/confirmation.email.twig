@@ -1,0 +1,7 @@
+<h3>
+    Yo, {{ user.getName() }}! Bro, confirm your registration.
+</h3>
+
+<p>
+    Click on <a href="{{ url('default_token_confirmation', {'token': user.getConfirmationToken()}) }}">link</a>
+</p>
