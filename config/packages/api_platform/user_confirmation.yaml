@@ -1,0 +1,6 @@
+App\Entity\UserConfirmation:
+  collectionOperations:
+    post:
+      method: 'POST'
+      path: 'users/confirm'
+  itemOperations: {}
