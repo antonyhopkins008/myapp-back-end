@@ -21,7 +21,7 @@ class User implements UserInterface {
     const ROLE_WRITER = 'ROLE_WRITER';
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_SUPERADMIN = 'ROLE_SUPERADMIN';
-    const DEFAULT_ROLES = 'ROLE_COMMENTATOR';
+    const DEFAULT_ROLES = [self::ROLE_COMMENTATOR];
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -62,20 +62,22 @@ class User implements UserInterface {
     private $retypedPassword;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"put-reset-password"})
      * @Assert\Regex(
      *     pattern="/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/",
-     *     message="Password must be more than six chars length and contain at lest one upper letter, one lower letter, one digit"
+     *     message="Password must be more than six chars length and contain at lest one upper letter, one lower letter, one digit",
+     *     groups={"put-reset-password"}
      * )
      * @Groups({"put-reset-password"})
      */
     private $newPassword;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"put-reset-password"})
      * @Assert\Expression(
      *     "this.getNewPassword() === this.getNewRetypedPassword()",
-     *     message="Password must match retyped password"
+     *     message="Password must match retyped password",
+     *     groups={"put-reset-password"}
      * )
      * @Groups({"put-reset-password"})
      */
@@ -83,8 +85,8 @@ class User implements UserInterface {
 
     /**
      * @Groups({"put-reset-password"})
-     * @Assert\NotBlank()
-     * @UserPassword()
+     * @Assert\NotBlank(groups={"put-reset-password"})
+     * @UserPassword(groups={"put-reset-password"})
      */
     private $oldPassword;
 
@@ -129,6 +131,15 @@ class User implements UserInterface {
     private $roles;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $confirmationToken;
+    /**
      * User constructor.
      */
     public function __construct()
@@ -136,6 +147,8 @@ class User implements UserInterface {
         $this->post = new ArrayCollection();
         $this->comment = new ArrayCollection();
         $this->roles = self::DEFAULT_ROLES;
+        $this->enabled = false;
+        $this->confirmationToken = null;
     }
 
     public function getId(): ?int
@@ -275,5 +288,25 @@ class User implements UserInterface {
     public function setPasswordChangedDate($passwordChangedDate): void
     {
         $this->passwordChangedDate = $passwordChangedDate;
+    }
+
+    public function getEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled($enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken($confirmationToken): void
+    {
+        $this->confirmationToken = $confirmationToken;
     }
 }

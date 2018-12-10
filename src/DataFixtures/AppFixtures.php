@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
 use App\Entity\User;
+use App\Security\TokenGenerator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory;
@@ -19,6 +20,7 @@ class AppFixtures extends Fixture {
             'name' => 'Anton Pokhodun',
             'password' => 'test123T',
             'roles' => [User::ROLE_SUPERADMIN],
+            'enabled' => true,
         ],
         [
             'username' => 'bobby',
@@ -26,6 +28,7 @@ class AppFixtures extends Fixture {
             'name' => 'Bob Sinclar',
             'password' => 'test123T',
             'roles' => [User::ROLE_ADMIN],
+            'enabled' => true,
         ],
         [
             'username' => 'johny',
@@ -33,6 +36,7 @@ class AppFixtures extends Fixture {
             'name' => 'John Travolta',
             'password' => 'test123T',
             'roles' => [User::ROLE_WRITER],
+            'enabled' => true,
         ],
         [
             'username' => 'bless',
@@ -40,6 +44,7 @@ class AppFixtures extends Fixture {
             'name' => 'Bless Pascal',
             'password' => 'test123T',
             'roles' => [User::ROLE_WRITER],
+            'enabled' => true,
         ],
         [
             'username' => 'leo',
@@ -47,6 +52,7 @@ class AppFixtures extends Fixture {
             'name' => 'Leonardo DiCaprio',
             'password' => 'test123T',
             'roles' => [User::ROLE_EDITOR],
+            'enabled' => true,
         ],
         [
             'username' => 'russel',
@@ -54,6 +60,7 @@ class AppFixtures extends Fixture {
             'name' => 'Russel Craw',
             'password' => 'test123T',
             'roles' => [User::ROLE_COMMENTATOR],
+            'enabled' => false,
         ],
     ];
     private $encoder;
@@ -61,15 +68,23 @@ class AppFixtures extends Fixture {
      * @var \Faker\Factory
      */
     private $faker;
+    /**
+     * @var TokenGenerator
+     */
+    private $tokenGenerator;
 
     /**
      * AppFixtures constructor.
      * @param UserPasswordEncoderInterface $encoder
+     * @param TokenGenerator $tokenGenerator
      */
-    public function __construct(UserPasswordEncoderInterface $encoder)
-    {
+    public function __construct(
+        UserPasswordEncoderInterface $encoder,
+        TokenGenerator $tokenGenerator
+    ) {
         $this->encoder = $encoder;
         $this->faker = Factory::create();
+        $this->tokenGenerator = $tokenGenerator;
     }
 
     public function load(ObjectManager $manager)
@@ -88,6 +103,11 @@ class AppFixtures extends Fixture {
             $user->setPassword($this->encoder->encodePassword($user, $userTemplate['password']));
             $user->setUsername($userTemplate['username']);
             $user->setRoles($userTemplate['roles']);
+            $user->setEnabled($userTemplate['enabled']);
+
+            if(!$userTemplate['enabled']) {
+                $user->setConfirmationToken($this->tokenGenerator->getRandomToken());
+            }
             $this->addReference('user_'.$userTemplate['username'], $user);
             $manager->persist($user);
         }
