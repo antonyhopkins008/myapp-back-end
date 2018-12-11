@@ -67,11 +67,19 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
     private $slug;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Image")
+     * @ORM\JoinTable()
+     * @Groups({"post", "get-blog-post-with-author"})
+     */
+    private $images;
+
+    /**
      * BlogPost constructor.
      */
     public function __construct()
     {
         $this->comment = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getComment(): Collection
@@ -145,5 +153,20 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
         $this->author = $author;
 
         return $this;
+    }
+
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image)
+    {
+        $this->images->add($image);
+    }
+
+    public function removeImage(Image $image)
+    {
+        $this->images->removeElement($image);
     }
 }

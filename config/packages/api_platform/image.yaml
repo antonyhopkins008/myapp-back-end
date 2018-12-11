@@ -1,0 +1,13 @@
+App\Entity\Image:
+  itemOperations:
+    get: {}
+    put: {}
+
+  collectionOperations:
+    get: {}
+    post:
+      method: 'POST'
+      path: '/images'
+      controller: 'App\Controller\UploadImageAction'
+      defaults:
+        _api_receive: false
