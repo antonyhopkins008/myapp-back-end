@@ -34,3 +34,47 @@ services:
         arguments: ['@security.token_storage']
         tags:
             - {name: 'serializer.normalizer', priority: 64}
+
+    app.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [{ id: 'exact', title: 'partial', content: 'partial', author: 'exact', author.name: 'partial' } ]
+        tags:  [ 'api_platform.filter' ]
+        # The following are mandatory only if a _defaults section is defined
+        # You may want to isolate filters in a dedicated file to avoid adding them
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    app.date_filter:
+        parent: 'api_platform.doctrine.orm.date_filter'
+        arguments: [ { published: 'exact', title: 'partial', content: 'partial', author: 'exact' } ]
+        tags:  [ 'api_platform.filter' ]
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    app.range_filter:
+        parent: 'api_platform.doctrine.orm.range_filter'
+        tags:  [ 'api_platform.filter' ]
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    app.sort_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        #arguments: [{ orderParameterName: '_order' }]
+        tags:  [ 'api_platform.filter' ]
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    app.property_filter:
+        parent: 'api_platform.serializer.property_filter'
+        arguments:
+            - 'properties'
+            - false
+            - ['id', 'author', 'slug', 'title', 'content']
+        tags:  [ 'api_platform.filter' ]
+        autowire: false
+        autoconfigure: false
+        public: false

@@ -1,4 +1,8 @@
 App\Entity\Image:
+  attributes:
+    order:
+      {id: 'DESC'}
+
   itemOperations:
     get: {}
     put: {}

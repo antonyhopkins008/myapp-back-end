@@ -1,11 +1,13 @@
 App\Entity\Comment:
   attributes:
-#    force_eager: false
     normalization_context:
       groups: ['get']
 
     denormalization_context:
       groups: ['post']
+
+    order:
+      {published: 'DESC'}
 
   itemOperations:
     get:
