@@ -1,5 +1,8 @@
 App\Entity\Comment:
   attributes:
+    pagination_enabled: false
+    pagination_item_clients_per_page: false
+
     normalization_context:
       groups: ['get']
 
