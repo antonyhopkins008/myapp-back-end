@@ -46,7 +46,7 @@ class UserConfirmationSubscriber implements EventSubscriberInterface {
         /** @var UserConfirmation $confirmationToken */
         $confirmationToken = $event->getControllerResult();
 
-        $this->confirmationService->confirmUser($confirmationToken);
+        $this->confirmationService->confirmUser($confirmationToken->getConfirmationToken());
 
         $event->setResponse(new JsonResponse(null, Response::HTTP_OK));
     }

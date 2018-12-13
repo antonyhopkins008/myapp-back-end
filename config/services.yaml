@@ -78,3 +78,7 @@ services:
         autowire: false
         autoconfigure: false
         public: false
+
+    App\Security\UserConfirmationService:
+        arguments:
+            $logger: '@monolog.logger.token_confirmation'
