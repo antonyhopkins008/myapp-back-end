@@ -47,7 +47,7 @@ class Comment implements AuthoredEntityInterface, PublishedEntityInterface {
      */
     private $blogPost;
 
-    public function getBlogPost(): BlogPost
+    public function getBlogPost(): ?BlogPost
     {
         return $this->blogPost;
     }
@@ -89,7 +89,7 @@ class Comment implements AuthoredEntityInterface, PublishedEntityInterface {
     /**
      * @return User
      */
-    public function getAuthor()
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -99,5 +99,10 @@ class Comment implements AuthoredEntityInterface, PublishedEntityInterface {
         $this->author = $author;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return substr($this->content, 0, 20).'...';
     }
 }

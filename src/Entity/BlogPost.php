@@ -33,7 +33,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\DateTime()
+     * @Assert\Type(type="\DateTime")
      * @Groups({"get-blog-post-with-author", "get"})
      */
     private $published;
@@ -143,7 +143,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
         $this->slug = $slug;
     }
 
-    public function getAuthor()
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -168,5 +168,10 @@ class BlogPost implements AuthoredEntityInterface, PublishedEntityInterface {
     public function removeImage(Image $image)
     {
         $this->images->removeElement($image);
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
     }
 }

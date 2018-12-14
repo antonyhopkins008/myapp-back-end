@@ -61,4 +61,9 @@ class Image {
     {
         $this->url = $url;
     }
+
+    public function __toString()
+    {
+        return $this->id.':'.$this->url;
+    }
 }
