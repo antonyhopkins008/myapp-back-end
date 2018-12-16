@@ -4,7 +4,7 @@ App\Entity\BlogPost:
     pagination_partial: true
 
     normalization_context:
-      groups: ['get']
+      groups: ['get-blog-post-with-author']
 
     denormalization_context:
       groups: ['post']

@@ -30,6 +30,10 @@ services:
         decorates: 'api_platform.serializer.context_builder'
         arguments: ['@App\Serializer\UserContextBuilder.inner']
 
+    App\EventListener\ExceptionListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.exception, priority: 1}
+        arguments: ['@api_platform.action.exception', '@logger', true]
     App\Serializer\UserAttributeNormalizer:
         arguments: ['@security.token_storage']
         tags:

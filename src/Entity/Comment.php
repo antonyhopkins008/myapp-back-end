@@ -23,7 +23,7 @@ class Comment implements AuthoredEntityInterface, PublishedEntityInterface {
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      * @Assert\Length(min=6, max=2000)
-     * @Groups({"post", "get-comment-with-author", "get"})
+     * @Groups({"post", "get-comment-with-author"})
      */
     private $content;
 
@@ -43,7 +43,7 @@ class Comment implements AuthoredEntityInterface, PublishedEntityInterface {
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\BlogPost", inversedBy="comment")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"post"})
+     * @Groups({"post", "get-comment-with-author"})
      */
     private $blogPost;
 

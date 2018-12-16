@@ -4,7 +4,7 @@ App\Entity\Comment:
     pagination_item_clients_per_page: false
 
     normalization_context:
-      groups: ['get']
+      groups: ['get-comment-with-author']
 
     denormalization_context:
       groups: ['post']

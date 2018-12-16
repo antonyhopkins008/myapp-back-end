@@ -2,6 +2,10 @@ App\Entity\Image:
   attributes:
     order:
       {id: 'DESC'}
+    formats:
+      0: "json"
+      1: "jsonld"
+      form: 'multipart/form-data'
 
   itemOperations:
     get: {}
