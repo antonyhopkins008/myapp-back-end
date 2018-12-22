@@ -4,4 +4,5 @@
 
 <p>
     Click on <a href="{{ url('default_token_confirmation', {'token': user.getConfirmationToken()}) }}">link</a>
+    Or type the code inside the form:&nbsp;<b>{{ user.getConfirmationToken() }}</b>.
 </p>

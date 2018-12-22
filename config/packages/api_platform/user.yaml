@@ -24,7 +24,7 @@ App\Entity\User:
   #Collection
   collectionOperations:
     post:
-      access_control: is_granted('IS_AUTHENTICATED_FULLY', object)
+#      access_control: is_granted('IS_AUTHENTICATED_FULLY', object)
       denormalization_context:
         groups: ['post']
       normalization_context:

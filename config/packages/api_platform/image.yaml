@@ -10,6 +10,8 @@ App\Entity\Image:
   itemOperations:
     get: {}
     put: {}
+    delete:
+      access_control: is_granted('ROLE_WRITER', object)
 
   collectionOperations:
     get: {}

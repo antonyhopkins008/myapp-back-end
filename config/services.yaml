@@ -86,3 +86,7 @@ services:
     App\Security\UserConfirmationService:
         arguments:
             $logger: '@monolog.logger.token_confirmation'
+
+    App\EventListener\AuthSuccesListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }

@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"username", "email"})
+ * @UniqueEntity(fields={"username", "email"}, groups={"post", "put"})
  */
 class User implements UserInterface {
     const ROLE_COMMENTATOR = 'ROLE_COMMENTATOR';
